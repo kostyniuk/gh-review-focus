@@ -9,6 +9,30 @@ A Chrome extension that makes GitHub pull request reviews calmer:
 
 Collapsing happens once per visit. Open a collapsed file and it stays open.
 
+## Screenshots
+
+Taken on public PRs with `scripts/screenshots.mjs`.
+
+**Line counts without tests.** The bracket next to GitHub's own counter leaves out the 3 test files ([vitejs/vite#23855](https://github.com/vitejs/vite/pull/23855)):
+
+![PR counter showing +676 −720 and, in brackets, +342 −442 without tests](docs/counter.png)
+
+**Test files collapsed and badged:**
+
+![Three collapsed test files, each with a purple "test" badge](docs/collapse-tests.png)
+
+**Lockfile collapsed as noise** ([vitejs/vite#23778](https://github.com/vitejs/vite/pull/23778)):
+
+![Collapsed pnpm-lock.yaml with a grey "noise" badge](docs/collapse-noise.png)
+
+**Risky file badged.** A CI workflow change ([vitest-dev/vitest#11806](https://github.com/vitest-dev/vitest/pull/11806)):
+
+![.github/workflows/ci.yml with a yellow "risky" badge](docs/risky.png)
+
+**Options.** A token, three on/off switches, and the editable pattern lists:
+
+![Options page with token field, toggles and pattern lists](docs/options.png)
+
 Works on both GitHub *Files changed* pages: the new one (`/pull/N/changes`) and the classic one (`/pull/N/files`).
 
 ## Install
@@ -62,6 +86,7 @@ npm test                       # pattern unit tests (node:test)
 - `verify.mjs` reports each file's state and the counter for a PR.
 - `compare.mjs` checks that report against `gh api` output.
 - `verify-classic.mjs` checks the classic page, signed out.
+- `screenshots.mjs` regenerates the images in `docs/`.
 
 ## Status
 
