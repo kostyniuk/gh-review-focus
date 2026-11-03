@@ -1,0 +1,16 @@
+{
+  "name": "gh-review-focus",
+  "version": "1.0.0",
+  "description": "Chrome extension: calmer GitHub PR reviews",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test src/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "playwright": "^1.64.1"
+  }
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>GitHub Review Focus options</title>
+  <style>
+    :root { color-scheme: light dark; font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body { max-width: 720px; margin: 32px auto; padding: 0 16px; }
+    h1 { font-size: 20px; }
+    label { display: block; font-weight: 600; margin-top: 20px; }
+    .hint { font-weight: 400; color: GrayText; font-size: 13px; }
+    textarea, input[type=password] { width: 100%; box-sizing: border-box; font: 13px ui-monospace, monospace; margin-top: 6px; padding: 6px; }
+    textarea { height: 180px; }
+    .row { display: flex; gap: 8px; align-items: center; margin-top: 8px; font-weight: 400; }
+    button { margin-top: 20px; padding: 6px 16px; }
+    #status { margin-left: 12px; color: GrayText; }
+  </style>
+</head>
+<body>
+  <h1>GitHub Review Focus</h1>
+
+  <label for="token">GitHub token
+    <div class="hint">Needed for private repos and to avoid the 60 requests/hour anonymous limit. Use a fine-grained token with read-only <b>Pull requests</b> access to the repos you review. Stored only in this browser (chrome.storage.local) and only read by the extension's background worker.</div>
+  </label>
+  <input id="token" type="password" autocomplete="off" placeholder="github_pat_…">
+
+  <div class="row"><input type="checkbox" id="collapseTests"><span>Collapse test files</span></div>
+  <div class="row"><input type="checkbox" id="collapseNoise"><span>Collapse noise files (lockfiles, snapshots, generated code)</span></div>
+  <div class="row"><input type="checkbox" id="showRiskyBadges"><span>Badge risky files</span></div>
+
+  <label for="testPatterns">Test file patterns <span class="hint">one glob per line; a pattern without "/" matches the file name anywhere; # comments</span></label>
+  <textarea id="testPatterns"></textarea>
+  <label for="noisePatterns">Noise file patterns</label>
+  <textarea id="noisePatterns"></textarea>
+  <label for="riskyPatterns">Risky file patterns</label>
+  <textarea id="riskyPatterns"></textarea>
+
+  <button id="save">Save</button><button id="reset">Reset patterns to defaults</button><span id="status"></span>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

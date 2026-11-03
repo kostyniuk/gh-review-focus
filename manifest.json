@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Review Focus",
+  "version": "0.1.0",
+  "description": "Collapses test and noise files in GitHub pull requests, shows line counts without tests, and flags risky files.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://api.github.com/*"],
+  "background": { "service_worker": "src/background.js", "type": "module" },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "js": ["src/loader.js"],
+      "css": ["src/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    { "resources": ["src/*.js"], "matches": ["https://github.com/*"] }
+  ],
+  "options_ui": { "page": "src/options.html", "open_in_tab": true }
+}
