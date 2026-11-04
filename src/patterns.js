@@ -88,15 +88,22 @@ export function isRisky(path, settings) {
   return matchesAny(path, settings.riskyPatterns);
 }
 
-/** Sums additions/deletions of files that are not tests. `files` is the REST pulls/files shape. */
-export function statsWithoutTests(files, settings) {
-  let additions = 0, deletions = 0, testFiles = 0;
+/** Sums the lines left to review: files that are neither tests nor noise. `files` is the REST pulls/files shape. */
+export function reviewStats(files, settings) {
+  let additions = 0, deletions = 0, testFiles = 0, noiseFiles = 0;
   for (const f of files) {
-    if (matchesAny(f.filename, settings.testPatterns)) { testFiles++; continue; }
+    const kind = classify(f.filename, settings);
+    if (kind === 'test') { testFiles++; continue; }
+    if (kind === 'noise') { noiseFiles++; continue; }
     additions += f.additions;
     deletions += f.deletions;
   }
-  return { additions, deletions, testFiles };
+  return { additions, deletions, testFiles, noiseFiles };
+}
+
+/** The bracket shown next to GitHub's counter, e.g. "(+121 −34 w/o tests & noise)". */
+export function statsLabel({ additions, deletions }) {
+  return `(+${additions.toLocaleString('en-US')} −${deletions.toLocaleString('en-US')} w/o tests & noise)`;
 }
 
 export function parseSettingsText(text) {

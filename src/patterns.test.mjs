@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { classify, isRisky, statsWithoutTests, DEFAULT_SETTINGS as S } from './patterns.js';
+import { classify, isRisky, reviewStats, statsLabel, DEFAULT_SETTINGS as S } from './patterns.js';
 
 const cases = {
   test: [
@@ -41,11 +41,14 @@ test('risky', () => {
   assert.ok(!isRisky('apps/web/pages/index.tsx', S));
 });
 
-test('stats exclude tests only', () => {
-  const r = statsWithoutTests([
+test('stats leave out tests and noise', () => {
+  const r = reviewStats([
     { filename: 'src/a.ts', additions: 10, deletions: 2 },
     { filename: 'src/a.test.ts', additions: 50, deletions: 5 },
     { filename: 'bun.lock', additions: 7, deletions: 1 },
+    { filename: 'packages/db/drizzle/meta/0133_snapshot.json', additions: 10034, deletions: 0 },
+    { filename: 'packages/db/drizzle/0133_add_col.sql', additions: 16, deletions: 0 },
   ], S);
-  assert.deepEqual(r, { additions: 17, deletions: 3, testFiles: 1 });
+  assert.deepEqual(r, { additions: 26, deletions: 2, testFiles: 1, noiseFiles: 2 });
+  assert.equal(statsLabel({ additions: 1234, deletions: 5 }), '(+1,234 −5 w/o tests & noise)');
 });

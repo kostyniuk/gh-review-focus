@@ -3,7 +3,7 @@
 A Chrome extension that makes GitHub pull request reviews calmer:
 
 - **Collapses test files** when you open a PR's *Files changed* tab.
-- **Shows line counts without tests** next to GitHub's own counter: `+559 −1,124 (+172 −913 w/o tests)`.
+- **Shows line counts without tests and noise** next to GitHub's own counter: `+676 −720 (+336 −442 w/o tests & noise)`.
 - **Collapses noise**: lockfiles, snapshots, generated code, ORM migration snapshots.
 - **Badges risky files**: CI workflows, migrations, Dockerfiles, Terraform, env and deploy config.
 
@@ -13,9 +13,9 @@ Collapsing happens once per visit. Open a collapsed file and it stays open.
 
 Taken on public PRs with `scripts/screenshots.mjs`.
 
-**Line counts without tests.** The bracket next to GitHub's own counter leaves out the 3 test files ([vitejs/vite#23855](https://github.com/vitejs/vite/pull/23855)):
+**Line counts without tests and noise.** The bracket next to GitHub's own counter leaves out the 3 test files and the lockfile ([vitejs/vite#23855](https://github.com/vitejs/vite/pull/23855)):
 
-![PR counter showing +676 −720 and, in brackets, +342 −442 without tests](docs/counter.png)
+![PR counter showing +676 −720 and, in brackets, +336 −442 without tests and noise](docs/counter.png)
 
 **Test files collapsed and badged:**
 
@@ -63,7 +63,7 @@ All three lists are editable in Options. One glob per line:
 | Noise | `*.lock`, `package-lock.json`, `pnpm-lock.yaml`, `go.sum`, `*.snap`, `*.min.js`, `*.min.css`, `**/drizzle/meta/**`, `**/generated/**`, `*.generated.*` |
 | Risky | `.github/workflows/**`, `.github/CODEOWNERS`, `CODEOWNERS`, `**/migrations/**`, `**/drizzle/*.sql`, `Dockerfile`, `*.Dockerfile`, `docker-compose*.yml`, `*.tf`, `.env*`, `vercel.json`, `turbo.json` |
 
-A file that matches both the test and noise lists counts as a test. The `w/o tests` counter excludes test files only; noise files still count.
+A file that matches both the test and noise lists counts as a test. The bracket counter leaves out both test and noise files; hover it to see how many of each.
 
 ## How it works
 

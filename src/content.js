@@ -1,4 +1,4 @@
-import { classify, isRisky, statsWithoutTests } from './patterns.js';
+import { classify, isRisky, reviewStats, statsLabel } from './patterns.js';
 import { loadSettings } from './settings.js';
 
 // Works on both GitHub "Files changed" pages:
@@ -54,7 +54,7 @@ async function loadPr(owner, repo, number) {
   if (current !== pr) return; // navigated away meanwhile
   if (res?.error) { pr.error = res.error; schedule(); return; }
   for (const f of res.files) pr.byHash.set(await sha256(f.filename), f);
-  pr.stats = statsWithoutTests(res.files, settings);
+  pr.stats = reviewStats(res.files, settings);
   schedule();
 }
 
@@ -181,9 +181,7 @@ function renderCounter() {
 function counterText() {
   if (pr.error) return ['(?)', `GitHub Review Focus: ${pr.error}`];
   if (!pr.stats) return ['(…)', 'GitHub Review Focus: loading file list'];
-  const { additions, deletions, testFiles } = pr.stats;
-  return [
-    `(+${additions.toLocaleString('en-US')} −${deletions.toLocaleString('en-US')} w/o tests)`,
-    `Line counts without ${testFiles} test file${testFiles === 1 ? '' : 's'}`,
-  ];
+  const { testFiles, noiseFiles } = pr.stats;
+  const count = (n, kind) => `${n} ${kind} file${n === 1 ? '' : 's'}`;
+  return [statsLabel(pr.stats), `Line counts without ${count(testFiles, 'test')} and ${count(noiseFiles, 'noise')}`];
 }

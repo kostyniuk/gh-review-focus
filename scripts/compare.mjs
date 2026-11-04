@@ -1,12 +1,11 @@
 // Compare a verify.mjs report (file arg) with expectations computed from `gh api` JSON (second arg).
 import fs from 'node:fs';
-import { classify, isRisky, statsWithoutTests, DEFAULT_SETTINGS as S } from '../src/patterns.js';
+import { classify, isRisky, reviewStats, statsLabel, DEFAULT_SETTINGS as S } from '../src/patterns.js';
 const [obsFile, apiFile] = process.argv.slice(2);
 const files = JSON.parse(fs.readFileSync(apiFile)).flat();
 const s = fs.readFileSync(obsFile, 'utf8');
 const r = JSON.parse(s.slice(s.indexOf('{'), s.indexOf('\napi calls')));
-const st = statsWithoutTests(files, S);
-const wantCounter = `(+${st.additions.toLocaleString('en-US')} −${st.deletions.toLocaleString('en-US')} w/o tests)`;
+const wantCounter = statsLabel(reviewStats(files, S));
 console.log(`counter ${r.counter?.includes(wantCounter) ? 'OK' : 'MISMATCH'}: ${r.counter?.split(' Lines')[0]} (want ${wantCounter})`);
 let bad = 0;
 for (const f of r.files) {
